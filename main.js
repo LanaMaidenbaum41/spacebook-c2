@@ -7,10 +7,7 @@ function addPost(text) {
     var newPost = {
         text: text,
         id: postCounter,
-        comments: {
-            username:'',
-            text:''
-        }
+        comments: []
     }
 
     posts.push(newPost);
@@ -50,8 +47,7 @@ $('.posts').on('click', '.commentButton', function () {
     var newComment = $(this).siblings('.comment-name').val();
     if (newComment) {
         var postIndex = $(this).parent().parent().index();
-        posts[postIndex].comments.username = Username;
-        posts[postIndex].comments.text =newComment;
+        posts[postIndex].comments.push({username: Username, text: newComment});
     
         $('.comment-name').val('');
         $('.usernames').val('');
@@ -71,14 +67,13 @@ function renderComments(postId, postIndex) {
     //         postIndex = i;
     //     }
     // }
-    var $postComments = posts[postIndex].comments;
     var $comments = $('.post[data-id|=' + postId + ']').find('.comments');
     $comments.empty();
 
-    posts[postIndex].comments.forEach(function (i,text) {
+    posts[postIndex].comments.forEach(function (comment) {
 
-        $comments.append('<div class = "row"><button type="button" class="btn btn-default btn-circle">\
-        '+username+'</button><div class="postComment col-lg-6">' + text + '\
+        $comments.append('<div class = "row"><button type="button" class="btn btn-circle">\
+        '+comment.username+'</button><div class="postComment col-lg-6">' + comment.text + '\
         </div><button class="btn btn-xs btn-danger col-lg-6 glyphicon glyphicon-trash deleteComment"></button></div>');
 
     })
@@ -99,3 +94,5 @@ $('.row').on('click','.post',function(){
     var postId = $(this).data().id;
     $('body').append('<section>'+postId+'</section>');
 })
+
+$('.post[data-id|=' + postId + ']')
