@@ -1,0 +1,25 @@
+.postComment{
+    display: inline;
+
+}
+/* .deleteComment{
+    margin-left:;
+} */
+
+.btn-circle {
+    height: 20px;
+    margin-left:30px;
+    padding-bottom:22px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
+.post{
+    margin-bottom: 15px;
+}
+
+.row{
+    margin-bottom: 15px;
+}
