@@ -2,10 +2,6 @@
     display: inline;
 
 }
-/* .deleteComment{
-    margin-left:;
-} */
-
 .btn-circle {
     height: 20px;
     margin-left:30px;
@@ -15,11 +11,20 @@
     font-size: 12px;
     line-height: 1.42857;
 }
-
 .post{
     margin-bottom: 15px;
 }
 
 .row{
     margin-bottom: 15px;
+}
+
+/* .comments{
+  display: none;
+} */
+.hidden{
+  display: none;
+}
+.show{
+  display: block;
 }

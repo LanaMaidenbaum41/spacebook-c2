@@ -18,10 +18,10 @@ var SpacebookApp = function () {
         $('.posts').empty();
 
         posts.forEach(function (post, index) {
-            $('.posts').append('<div class = "post" data-id=' + post.id + '><button class="glyphicon glyphicon-trash remove"></button>\
+            $('.posts').append('<div class = "post" data-id=' + post.id + '><a href="#" class="newpg">go to post</a><button class="glyphicon glyphicon-trash remove"></button>\
         '+ post.text + '<br><form><input type="text" class="usernames" placeholder="Username"/><input type="text" class="comment-name" placeholder="Write a comment..."/>\
-        <button type="button" class="btn btn-xs btn-primary commentButton" >comment</button></form>\
-        <div class = "comments"></div></div>');
+        <button type="button" class="btn btn-xs btn-primary commentButton">comment</button></form>\
+        <a href="#" class="showComments">hide/show comments</a><div class = "show comments"></div></div>');
             renderComments(post.id, index);
         });
 
@@ -55,8 +55,8 @@ var SpacebookApp = function () {
         posts[postIndex].comments.forEach(function (comment) {
 
             $comments.append('<div class = "row"><button type="button" class="btn btn-circle">\
-        '+ comment.username + '</button><div class="postComment col-lg-6">' + comment.text + '\
-        </div><button class="btn btn-xs btn-danger col-lg-6 glyphicon glyphicon-trash deleteComment"></button></div>');
+        '+ comment.username + '</button><div class="postComment ">' + comment.text + '\
+        </div><button class="btn btn-xs btn-danger glyphicon glyphicon-trash deleteComment"></button></div>');
 
         })
 
@@ -65,11 +65,17 @@ var SpacebookApp = function () {
         posts[$postIndex].comments.splice(commentIndex, 1);
         renderComments($postId, $postIndex);
     }
+
+    function toggleComments(currentPost){
+        var $clickedPost = $(currentPost).closest('.post');
+        $clickedPost.find('.comments').toggleClass('hidden');
+    }
     return {
         addPost: addPost,
         deletePost: deletePost,
         createComment: createComment,
-        deleteComment: deleteComment
+        deleteComment: deleteComment,
+        toggleComments: toggleComments
     }
 }
 
@@ -99,6 +105,25 @@ $('.posts').on('click', '.commentButton', function () {
 
     app.createComment(postIndex, Username, newComment);
 });
+
+// //test
+// $('.selected-post').on('click', '.commentButton', function () {
+//     var postIndex = $(this).parent().parent().index();
+//     var $username = $(this).siblings('.usernames')
+//     var $comment = $(this).siblings('.comment-name')
+//     var Username = $username.val();
+//     var newComment = $comment.val();
+
+//     $username.val('');
+//     $comment.val('');
+
+//     app.createComment(postIndex, Username, newComment);
+// });
+
+
+$('.posts').on('click','.showComments',function(){
+    app.toggleComments(this);
+});
 $('.posts').on('click', '.deleteComment', function () {
     var commentIndex = $(this).parent().index();
     var $postId = $(this).closest('.post').data().id
@@ -107,9 +132,44 @@ $('.posts').on('click', '.deleteComment', function () {
 });
 
 //Extenstion 3 
-$('.row').on('click', '.post', function () {
-    var postId = $(this).data().id;
-    $('body').append('<section>' + postId + '</section>');
+$('.posts').on('click', '.newpg', function () {
+    $('.selected-post').empty();
+    var selectedPost = $(this).parent().html();
+    var $unselected = $('.unselected');
+    var $selected = $('.selected-post');
+    
+    $('.selected-post').append('<div class="col-xs-12">' + selectedPost + '</div>');
+    postScreen($unselected, $selected);
+});
+
+$('#home').click(function(){
+    var $unselected = $(this).parent().siblings('.unselected');
+    var $selected = $(this).parent().siblings('.selected-post');
+    homeScreen($unselected,$selected);
+
 })
 
-$('.post[data-id|=' + postId + ']')
+function homeScreen($unselected, $selected){
+    if (($unselected.attr('class')) === "unselected row hidden"){
+        $('.unselected').toggleClass('hidden');
+    }
+    if (($selected).attr('class') === "row text-center selected-post show"){
+        $('.selected-post').toggleClass('show');
+        $('.selected-post').toggleClass('hidden');
+    }
+    else if(($selected).attr('class') === "row text-center selected-post"){
+        $('.selected-post').toggleClass('hidden');
+    }
+}
+
+function postScreen($unselected, $selected){
+    if (($unselected.attr('class')) === "unselected row"){
+        $('.unselected').toggleClass('hidden');
+    }
+    if (($selected).attr('class') === "row text-center selected-post"){
+        $('.selected-post').toggleClass('show');
+    }
+    else if(($selected).attr('class') === "row text-center selected-post hidden"){
+        $('.selected-post').toggleClass('hidden');
+    }
+}
